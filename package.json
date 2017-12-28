@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
-    // "micro": "latest",
     "react-dom": "^16.2.0",
     "react-scripts": "1.0.17"
   },
@@ -13,7 +12,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    // "start": "micro",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

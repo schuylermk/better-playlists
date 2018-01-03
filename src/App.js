@@ -65,7 +65,7 @@ class HoursCounter extends Component {
     }, 0)
     return (
       <div style={{...defaultStyle, width: "40%", display:'inline-block'}}>
-        <h2>{Math.floor(totalDuration/3600)} hours</h2>
+        <h2>{((totalDuration / (1000) / (60 * 60)).toFixed(2))} hours</h2>
         {/* <h2>{allSongs.length} hours</h2> */}
       </div>
     );

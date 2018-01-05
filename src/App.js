@@ -28,9 +28,9 @@ let fakeServerData = {
       {
         name: 'The Best',
         songs: [
-          {name: 'Number One Song', duration: 750000},
+          {name: 'NumberwAng Song', duration: 750000},
           {name: 'Second Best Song', duration: 600000},
-          {name: 'Still Pretty Good', duration: 590000}
+          {name: 'Still Pretty Okay', duration: 590000}
         ]
       },
       {
@@ -65,8 +65,7 @@ class HoursCounter extends Component {
     }, 0)
     return (
       <div style={{...defaultStyle, width: "40%", display:'inline-block'}}>
-        <h2>{((totalDuration / (1000) / (60 * 60)).toFixed(2))} hours</h2>
-        {/* <h2>{allSongs.length} hours</h2> */}
+        <h2>{((totalDuration/(1000)/(3600)).toFixed(2))} hours</h2>
       </div>
     );
   }
@@ -83,14 +82,19 @@ class Filter extends Component {
 }
 class Playlist extends Component {
   render() {
+    let playlist = this.props.playlist
     return (
-      <div style={{...defaultStyle, display:"inline-block", width: "25%"}}>
+      <div style={{...defaultStyle, 
+      display:'inline-block', 
+      width: '25%',
+      'textAlign': 'left'
+      }}>
         <img  />
-        <h3>Playlist Name</h3>
+        <h3>{playlist.name}</h3>
         <ul>
-          <li>Song 1</li>
-          <li>Song 2</li>
-          <li>Song 3</li>
+          {playlist.songs.map(song =>
+            <li>{song.name}</li>
+          )}
         </ul>
       </div>
     );
@@ -101,29 +105,30 @@ class App extends Component {
   constructor() {
     super();
     this.state = {serverData: {}}
-  }
-  
+  } 
   componentDidMount() {
     setTimeout(() => {
       this.setState({serverData: fakeServerData});  
-    }, 100);
+    }, 1000);
   }
   render() {
     return (
       <div className="App">
         {this.state.serverData.user ?
+        
           <div>
-        <h1 style={{ ...defaultStyle, 'fontSize': '54px'}}>
-          {this.state.serverData.user.name}'s Playlists
-        </h1>
+            <h1 style={{ ...defaultStyle, 'fontSize': '54px'}}>
+              {this.state.serverData.user.name}'s Playlists
+            </h1>  
             <PlaylistCounter playlists={this.state.serverData.user.playlists} />
             <HoursCounter playlists={this.state.serverData.user.playlists}/>
             <Filter />
-            <Playlist />
-            <Playlist />
-            <Playlist />
-            <Playlist />
-          </div>: <h2 style={defaultStyle}>Loading...</h2>
+              {this.state.serverData.user.playlists.map(playlist =>
+                <Playlist playlist={playlist}/>
+              )}
+          </div> :
+
+        <h2 style={defaultStyle}>Loading...</h2>
         }
         
       </div>

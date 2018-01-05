@@ -2,7 +2,7 @@
   text-align: center;
 }
 li {
-  list-style: none;
+  list-style: armenian;
 }
 
 .App-logo {
@@ -21,7 +21,7 @@ li {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
+/* @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
+} */

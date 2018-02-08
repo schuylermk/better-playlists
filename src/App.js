@@ -39,9 +39,10 @@ class HoursCounter extends Component {
     let totalDuration = allSongs.reduce((sum, eachSong) => {
       return sum + eachSong.duration
     }, 0)
+    let totalDurationHours = Math.round(totalDuration/60)
     return ( 
       <h2 style={defaultStyle}>
-        {((totalDuration/(1000)/(3600)).toFixed(2))} hours
+        {totalDurationHours} hours
       </h2>
     );
   }

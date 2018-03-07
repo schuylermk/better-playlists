@@ -7,22 +7,6 @@ let defaultStyle = {
   marginBottom: '2rem'
 };
 
-// let fakeServerData = {
-//   user: {
-//     name: 'Schuyler',
-//     playlists: [
-//       {
-//         name: 'The Worst',
-//         songs: [
-//           {name: 'Sausage Song', duration: 700000},
-//           {name: 'Wiener Song', duration: 780000},
-//           {name: 'Texas Hots', duration: 190000}
-//         ]
-//       }
-//     ]
-//   }
-// };
-
 class PlaylistCounter extends Component {
   render() {
     return (
@@ -39,12 +23,27 @@ class HoursCounter extends Component {
     let totalDuration = allSongs.reduce((sum, eachSong) => {
       return sum + eachSong.duration
     }, 0)
-    let totalDurationHours = totalDuration / 1000 
-    return ( 
-      <h2 style={defaultStyle}>
-        {totalDurationHours} hours
-      </h2>
-    );
+    let totalDurationHours = Math.floor(totalDuration / 60) 
+    let minutes = Math.floor(totalDuration % 60)
+    if (totalDurationHours < 1) {    
+      return ( 
+        <h2 style={defaultStyle}>
+          {minutes} minutes
+        </h2>
+      )
+    } else if (2 > totalDurationHours >= 1) {
+      return (
+        <h2 style={defaultStyle}>
+          {totalDurationHours} hour, {minutes} minutes
+        </h2>
+      )
+    } else { 
+      return (
+        <h2 style={defaultStyle}>
+          {totalDurationHours} hours, {minutes} minutes
+        </h2>
+      )
+    }
   }
 }
 
@@ -65,24 +64,29 @@ class Playlist extends Component {
     let playlist = this.props.playlist
     return (
       <div style={{...defaultStyle, 
-        alignItems: 'flex-start',
-        display: 'flex',
-        flexDirection: 'column', 
-        marginLeft: '1.2rem',
-        textAlign: 'left',
-        width: '200px',
+        alignItems: 'center',
+        border: '1px dotted chartreuse',
+        borderRadius: '.5rem',
+        display: 'inline-flex',
+        flexDirection: 'column',
+        width: '300px',
       }}>
-        <h3 style={{color: '#B9A', marginLeft: '1rem'}}>{playlist.name}</h3>
+        <h3 style={{color: '#B9A'}}>{playlist.name}</h3>
         <img src={playlist.imageUrl} alt='playlist cover' />
-        <ul style={{
-          display: 'flex',
+        <ol style={{
+          display: 'inline-flex',
           flexDirection: 'column',
-          margin: 0
+          maxHeight: '350px',
+          overflowY: 'auto',
+          margin: '1.5rem',
+          width: '90%'
         }}>
           {playlist.songs.map(song =>
-            <li>{song.name}</li>
+            <li>
+              {song.name}
+            </li>
           )}
-        </ul>
+        </ol>
       </div>
     );
   }
@@ -131,10 +135,9 @@ class App extends Component {
               .map(item => item.track)
               .map(trackData => ({
                 name: trackData.name,
-                duration: trackData.duration_ms / 1000
+                duration: ((trackData.duration_ms/1000) / 60)
               }))
             })
-            // console.log(playlists)
             return playlists
         })
         return playlistsPromise
@@ -144,7 +147,7 @@ class App extends Component {
           return {
             name: item.name,
             imageUrl: item.images[0].url,
-            songs: item.trackDatas.slice(0, 3)
+            songs: item.trackDatas
           }
         })
       }))
@@ -169,7 +172,7 @@ class App extends Component {
           <h1 style={{ ...defaultStyle, 'fontSize': '54px'}}>
             {this.state.user.name}'s Playlists
           </h1>  
-          <div className="Counters">
+          <div className="Counters playCount">
             <PlaylistCounter playlists={playlistToRender} />
           </div>
           <div className="Counters">

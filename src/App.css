@@ -3,26 +3,31 @@
 }
 
 li {
-  list-style: armenian;
-  text-align: justify;
+  font-size: 12px;
+  list-style: decimal;
+  line-height: 16px;
+  padding: 4px;
+  text-align: left;
+  vertical-align: text-top;
+  width: 95%;
 }
 
 .Counters {
-  border: dotted #104c70;
-  border-radius: 8px;
-  border-right: none;
-  border-top: none;
-  border-width: 0.5rem;
   display: inline-block;
   margin: 0 1rem 2rem;
   min-width: 300px;
 }
 
+.playCount {
+  border-top: none;
+  border-width: 0.5rem;
+  border-right: 1px dotted chartreuse;
+}
+
 .PlaylistsContainer {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-evenly;
-  /* border: 2px solid yellow; */
+  align-items: center;
 }
 
 .App-logo {

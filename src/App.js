@@ -39,7 +39,7 @@ class HoursCounter extends Component {
     let totalDuration = allSongs.reduce((sum, eachSong) => {
       return sum + eachSong.duration
     }, 0)
-    let totalDurationHours = Math.round(totalDuration/60)
+    let totalDurationHours = totalDuration / 1000 
     return ( 
       <h2 style={defaultStyle}>
         {totalDurationHours} hours
@@ -133,8 +133,9 @@ class App extends Component {
                 name: trackData.name,
                 duration: trackData.duration_ms / 1000
               }))
-          })
-          return playlists
+            })
+            // console.log(playlists)
+            return playlists
         })
         return playlistsPromise
       })
@@ -153,10 +154,14 @@ class App extends Component {
     let playlistToRender = 
     this.state.user &&
     this.state.playlists 
-      ? this.state.playlists.filter(playlist =>
-        playlist.name.toLowerCase().includes(
-          this.state.filterString.toLowerCase()))
-      : []
+      ? this.state.playlists.filter(playlist => {
+        let matchesPlaylist = playlist.name.toLowerCase().includes(
+          this.state.filterString.toLowerCase()) 
+        let matchesSong = playlist.songs.find(song => song.name.toLowerCase()
+          .includes(this.state.filterString.toLowerCase()))
+        return matchesPlaylist || matchesSong
+      }) : []
+
     return (
       <div className="App">
         {this.state.user ?

@@ -4,12 +4,11 @@
 
 li {
   font-size: 12px;
-  list-style: decimal;
   line-height: 16px;
-  padding: 4px;
+  list-style: decimal outside;
+  margin-left: -1rem;
+  padding: 4px 2px;
   text-align: left;
-  vertical-align: text-top;
-  width: 95%;
 }
 
 .Counters {

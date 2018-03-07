@@ -65,21 +65,22 @@ class Playlist extends Component {
     return (
       <div style={{...defaultStyle, 
         alignItems: 'center',
+        background: 'rgba(255, 255, 255, .1)',
         border: '1px dotted chartreuse',
         borderRadius: '.5rem',
         display: 'inline-flex',
         flexDirection: 'column',
-        width: '300px',
+        padding: '.5rem',
+        width: '300px'
       }}>
         <h3 style={{color: '#B9A'}}>{playlist.name}</h3>
-        <img src={playlist.imageUrl} alt='playlist cover' />
+        <img style={{width: '96%', border: '1px solid violet', borderRadius: '.2rem'}}src={playlist.imageUrl} alt='playlist cover' />
         <ol style={{
           display: 'inline-flex',
           flexDirection: 'column',
-          maxHeight: '350px',
-          overflowY: 'auto',
-          margin: '1.5rem',
-          width: '90%'
+          maxHeight: '500px',
+          overflowY: 'scroll',
+          width: '82%'
         }}>
           {playlist.songs.map(song =>
             <li>

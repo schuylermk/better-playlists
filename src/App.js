@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
 import queryString from 'query-string';
+import Glide from '@glidejs/glide';
+
 
 let defaultStyle = {
-  color: '#fff',
-  marginBottom: '2rem'
-};
+  color: '#404041',
+  alignItems: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center'
+}
 
 class PlaylistCounter extends Component {
   render() {
     return (
-      <h2 style={defaultStyle}>{this.props.playlists.length} playlists</h2>
+      <h4 style={{defaultStyle}}>{this.props.playlists.length} playlists</h4>
     );
   }
 }
@@ -27,21 +32,21 @@ class HoursCounter extends Component {
     let minutes = Math.floor(totalDuration % 60)
     if (totalDurationHours < 1) {    
       return ( 
-        <h2 style={defaultStyle}>
+        <h4 style={{defaultStyle}}>
           {minutes} minutes
-        </h2>
+        </h4>
       )
     } else if (2 > totalDurationHours >= 1) {
       return (
-        <h2 style={defaultStyle}>
+        <h4 style={{defaultStyle}}>
           {totalDurationHours} hour, {minutes} minutes
-        </h2>
+        </h4>
       )
     } else { 
       return (
-        <h2 style={defaultStyle}>
+        <h4 style={{defaultStyle}}>
           {totalDurationHours} hours, {minutes} minutes
-        </h2>
+        </h4>
       )
     }
   }
@@ -50,8 +55,15 @@ class HoursCounter extends Component {
 class Filter extends Component {
   render() {
     return (
-      <div style={defaultStyle}>
-        <img alt=''/>
+      <div style={{
+         ...defaultStyle,
+        flexDirection: 'row'
+      }}>
+        <img style={{
+          height: '1rem',
+          width: '40px'
+        }} 
+          src="magnifying-glass.svg" alt="" />  
         <input type="text" onKeyUp={event => 
           this.props.onTextChange(event.target.value)}/>
       </div>
@@ -62,33 +74,33 @@ class Filter extends Component {
 class Playlist extends Component {
   render() {
     let playlist = this.props.playlist
-    return (
-      <div style={{...defaultStyle, 
-        alignItems: 'center',
-        background: 'rgba(255, 255, 255, .1)',
-        border: '1px dotted chartreuse',
-        borderRadius: '.5rem',
-        display: 'inline-flex',
-        flexDirection: 'column',
-        padding: '.5rem',
-        width: '300px'
+  return (
+    <div className="playlist glide__slide">
+      <h4 style={{
+        marginBottom: '1rem'
       }}>
-        <h3 style={{color: '#B9A'}}>{playlist.name}</h3>
-        <img style={{width: '96%', border: '1px solid violet', borderRadius: '.2rem'}}src={playlist.imageUrl} alt='playlist cover' />
-        <ol style={{
-          display: 'inline-flex',
-          flexDirection: 'column',
-          maxHeight: '500px',
-          overflowY: 'scroll',
-          width: '82%'
-        }}>
-          {playlist.songs.map(song =>
-            <li>
-              {song.name}
-            </li>
-          )}
-        </ol>
-      </div>
+      {playlist.name}</h4>
+      <img style={{
+          height: '', 
+          borderRadius: '.2rem'
+        }}
+        src={playlist.imageUrl} alt='playlist cover' />
+      <ol style={{
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '0 0 0 1rem',
+        maxHeight: '500px',
+        overflowY: 'scroll',
+        padding: '1rem',
+        width: '82%'
+      }}>
+        {playlist.songs.map(song =>
+          <li>
+            {song.name}
+          </li>
+        )}
+      </ol>
+    </div>
     );
   }
 }
@@ -169,32 +181,77 @@ class App extends Component {
     return (
       <div className="App">
         {this.state.user ?
-        <div>
-          <h1 style={{ ...defaultStyle, 'fontSize': '54px'}}>
-            {this.state.user.name}'s Playlists
-          </h1>  
-          <div className="Counters playCount">
-            <PlaylistCounter playlists={playlistToRender} />
+          <div className="mainContainer" 
+            style={{
+               ...defaultStyle,
+              flexDirection: 'row', 
+              height: '100vh',
+              width: '100vw'
+            }}>
+            
+            <div className="left" style={{
+               ...defaultStyle,
+              height: '80vh', 
+              padding: '2rem', 
+              width: '36%'
+            }}>
+              
+              <div className="intro-inner"
+                style={{
+                  ...defaultStyle,
+                  background: 'rgba(193, 29, 29, 0.2)',
+                  border: '1px dashed black',
+                  borderRadius: '0.5rem',
+                  fontSize: '2rem',
+                  height: '100%',
+                  padding: '2rem',
+                  width: '80%'
+                }}>
+                <h1>
+                {this.state.user.name}'s Playlists
+                </h1>  
+                
+                <div className="Counters playCount">
+                  <PlaylistCounter playlists={playlistToRender} />
+                </div>
+                
+                <div className="Counters">
+                  <HoursCounter playlists={playlistToRender} />
+                </div>
+              
+                <Filter onTextChange={text => {
+                  this.setState({filterString: text})
+                }}/>
+
+              </div>
+            </div> 
+
+            
+            <div class="glide right">
+              <div data-glide-el="track" class="glide__track">
+                <div className="PlaylistsContainer glide__slides">
+                  {playlistToRender.map(playlist =>
+                    <Playlist playlist={playlist} />
+                  )}
+                </div>
+              </div>
+            </div>
+
           </div>
-          <div className="Counters">
-            <HoursCounter playlists={playlistToRender} />
-          </div>
-          <Filter onTextChange={text => {
-            this.setState({filterString: text})
-          }}/>
-          <div className="PlaylistsContainer">
-            {playlistToRender.map(playlist =>
-              <Playlist playlist={playlist} />
-            )}
-          </div>        
-        </div> : <button onClick={() => {
-          window.location = window.location.href.includes('localhost')    
+          : <button onClick={() => window.location = window.location.href.includes('localhost')
             ? 'http://localhost:8888/login'
-            : 'https://protomartinez-backend.herokuapp.com/login'}
-          }
-          style={{'borderRadius': '4px','fontSize': '32px', padding: '8px 16px', 'marginTop': '16px'}}>Sign in with Spotify</button>
+            : 'https://protomartinez-backend.herokuapp.com/login'
+            }
+            style={{
+              borderRadius: '4px',
+              fontSize: '32px',
+              padding: '8px 16px',
+              marginTop: '16px'
+            }}>
+            Sign in with Spotify
+            </button>
         }
-      </div>
+      </div>  
     );
   }
 }
